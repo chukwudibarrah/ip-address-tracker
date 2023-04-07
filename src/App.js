@@ -1,23 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+import PageTitle from './components/PageTitle';
+import SearchBar from './components/SearchBar';
+import SearchDetails from './components/SearchDetails';
+import background from './components/images/pattern-bg-desktop.png'
 
 function App() {
   return (
     <main className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section style={{ backgroundImage: `url(${background})`}} className='bg-no-repeat bg-cover min-h-full'>
+        <PageTitle/>
+        <SearchBar/>
+        <SearchDetails/>
+      </section>
     </main>
   );
 }
