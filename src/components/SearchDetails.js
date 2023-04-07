@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 export default function SearchDetails() {
+    // var detailsBar = document.getElementById("displayDetails");
+    // detailsBar.style.display = "none";
+    // const inputRef = useRef(null);
+
+    // function handleSubmit(e) {
+    //     e.preventDefault();
+    //     const ipAddress = console.log(inputRef.current.value);
+    //     console.log("Your IP address is", ipAddress);
+    //     detailsBar.style.display = "block";
+    // }
+
+
     return (
-        <div className='container flex flex-row md:flex-col invisible text-[#2B2B2B]'>
+        <div className='container flex justify-center flex-row md:flex-col text-[#2B2B2B]' id='displayDetails'>
             <p>
                 IP ADDRESS
             </p>
-            <vr></vr>
+            <hr/>
             <p>
                 LOCATION
             </p>
-            <vr></vr>
+            <hr/>
             <p>
                 TIME ZONE
             </p>
-            <vr></vr>
+            <hr/>
             <p>
                 ISP
             </p>
