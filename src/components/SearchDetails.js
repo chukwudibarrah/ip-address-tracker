@@ -1,35 +1,35 @@
-import React, { useRef } from 'react';
+import { useSelector } from "react-redux";
 
 export default function SearchDetails() {
-    // var detailsBar = document.getElementById("displayDetails");
-    // detailsBar.style.display = "none";
-    // const inputRef = useRef(null);
-
-    // function handleSubmit(e) {
-    //     e.preventDefault();
-    //     const ipAddress = console.log(inputRef.current.value);
-    //     console.log("Your IP address is", ipAddress);
-    //     detailsBar.style.display = "block";
-    // }
-
-
-    return (
-        <div className='container flex justify-center flex-row md:flex-col text-[#2B2B2B]' id='displayDetails'>
+    const user = useSelector((state) => state.user); // <-- select the user state
+        return (
+        <div className='container flex justify-evenly py-7 shadow-2xl z-40 rounded-lg bg-white flex-row md:flex-col text-[#2B2B2B]' id='displayDetails'>
+            <div className="flex-col seachResult">
             <p>
                 IP ADDRESS
             </p>
+            <p>
+                {user}
+            </p>
             <hr/>
+            </div>
+            <div className="flex-col seachResult">
             <p>
                 LOCATION
             </p>
             <hr/>
+            </div>
+            <div className="flex-col seachResult">
             <p>
                 TIME ZONE
             </p>
             <hr/>
+            </div>
+            <div className="flex-col seachResult">
             <p>
                 ISP
             </p>
+            </div>
         </div>
     )
 }
