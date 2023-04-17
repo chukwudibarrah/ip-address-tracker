@@ -1,21 +1,19 @@
 $(document).ready(function () {
 
-  let map = L.map("map").setView([51.505, -0.09], 1);
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
-
-  // get default user location
-
   let success = (position) => {
     let lat = position.coords.latitude
     let long = position.coords.longitude
 
     console.log(lat, long);
 
-    L.marker([lat, long]).addTo(map)
+    let map = L.map("map").setView([lat, long], 15);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    L.marker([lat, long]).addTo(map);
   }
 
   let error = () => {
@@ -23,6 +21,8 @@ $(document).ready(function () {
   }
 
   navigator.geolocation.watchPosition(success, error)
+
+
 
 
   
