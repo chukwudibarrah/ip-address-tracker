@@ -1,35 +1,21 @@
 $(document).ready(function () {
 
-  // let success = (position) => {
-  //   let lat = position.coords.latitude
-  //   let long = position.coords.longitude
+  // create icon for map
+  let myIcon = L.icon({
+    iconUrl: '../images/icon-location.svg',
+    iconAnchor: [22, 94],
+    popupAnchor: [-3, -76],
+    shadowAnchor: [22, 94]
+  })
 
-  //   // console.log(lat, long);
-
-  //   let map = L.map("map").setView([lat, long], 15);
-  //   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  //     maxZoom: 19,
-  //     attribution:
-  //       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  //   }).addTo(map);
-
-  //   L.marker([lat, long]).addTo(map);
-  // }
-
-  // let error = () => {
-  //   console.log('Unable to get location');
-  // }
-
-  // navigator.geolocation.watchPosition(success, error)
-  
+  // clear results from center panel on new search
   function clearResults() {
-    $('.result-display').empty();
+    $(".result-display").empty();
   }
-
 
   $("#form").on("submit", function (e) {
     e.preventDefault(); //prevent default form behaviour
-    clearResults()
+    clearResults();
 
     // define and get user input from field
     let userInput = $(".user-input").val().trim();
@@ -52,39 +38,49 @@ $(document).ready(function () {
     }).then(function (response) {
       let displayIp = response.ip;
       let displayCity = response.location.city;
+      let region = response.location.region;
+      let postalCode = response.location.postalCode;
       let newLat = response.location.lat;
       let newLong = response.location.lng;
       let timezone = response.location.timezone;
       let isp = response.isp;
 
       // display the results on the results bar
+      $("#show-ip").append(
+        $("<li>")
+          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .text(displayIp)
+      );
 
-      $('#show-ip').append($('<p>').addClass("result-display text-lg font-medium text-[#2B2B2B] py-2").text(displayIp));
-      
-      $('#show-location').append($('<p>').addClass("result-display text-lg font-medium text-[#2B2B2B] py-2").text(displayCity));
+      $("#show-location").append(
+        $("<li>")
+          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .text(displayCity + ", " + region + " " + postalCode)
+      );
 
-      $('#show-timezone').append($('<p>').addClass("result-display text-lg font-medium text-[#2B2B2B] py-2").text(timezone));
+      $("#show-timezone").append(
+        $("<li>")
+          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .text("UTC " + timezone)
+      );
 
-      $('#show-isp').append($('<p>').addClass("result-display text-lg font-medium text-[#2B2B2B] py-2").text(isp));
+      $("#show-isp").append(
+        $("<li>")
+          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .text(isp)
+      );
 
       // pass values to the map API
-
-      
-      let map = L.map("map").setView([newLat, newLong], 17);
+      let map = L.map("map", { center: [newLat, newLong], zoom: 17 });
+      L.marker([newLat, newLong], {icon: myIcon}).addTo(map);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
-      L.marker([newLat, newLong]).addTo(map);
-      map.panTo([newLat, newLong]);
-
-      // pass values to and create results fields
-
-
-
     });
 
+    // clear the input field after search
     $(".user-input").val("");
   });
 
