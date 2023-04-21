@@ -22,6 +22,7 @@ The goal was to build an IP Address Tracker app and get it looking as close to t
 
 Users should be able to:
 
+- Input field is cleared after each search
 - View the optimal layout for each page depending on their device's screen size
 - See hover states for all interactive elements on the page
 - See their own IP address on the map on the initial page load
@@ -29,7 +30,8 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![Desktop](./screenshots/screenshot-desktop.png)
+![Mobile](./screenshots/screenshot-mobile.png)
 
 ### Links
 
