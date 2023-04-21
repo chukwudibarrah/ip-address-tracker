@@ -1,16 +1,51 @@
 $(document).ready(function () {
-
   // create icon for map
   let myIcon = L.icon({
-    iconUrl: '../images/icon-location.svg',
-    iconAnchor: [22, 94],
-    popupAnchor: [-3, -76],
-    shadowAnchor: [22, 94]
-  })
+    iconUrl: "../images/icon-location.svg"
+  });
+
+  // initialise map view with generic location
+  let map = L.map("map");
+  map.setView([51.505, -0.09], 17);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+  // prompt user to access browser location
+  navigator.geolocation.watchPosition(success, error);
+
+  let marker, circle, zoomed;
+
+  function success(pos) {
+    let lat = pos.coords.latitude;
+    let long = pos.coords.longitude;
+    let accuracy = pos.coords.accuracy;
+
+    marker = L.marker([lat, long], { icon: myIcon }).addTo(map);
+    circle = L.circle([lat, long], { radius: accuracy }).addTo(map);
+
+    // remove circle from map
+    if (marker) {
+      map.removeLayer(circle);
+    }
+
+    // update map view to user's current location
+    map.setView([lat, long]);
+  }
+
+  function error(err) {
+    if (err.code === 1) {
+      alert("Please allow access to your approximate location.");
+    } else {
+      alert("Cannot get current location.");
+    }
+  }
 
   // clear results from center panel on new search
   function clearResults() {
-    $(".result-display").empty();
+    $(".show-results").empty();
   }
 
   $("#form").on("submit", function (e) {
@@ -40,48 +75,49 @@ $(document).ready(function () {
       let displayCity = response.location.city;
       let region = response.location.region;
       let postalCode = response.location.postalCode;
-      let newLat = response.location.lat;
-      let newLong = response.location.lng;
+      let lat = response.location.lat;
+      let long = response.location.lng;
       let timezone = response.location.timezone;
       let isp = response.isp;
 
       // display the results on the results bar
       $("#show-ip").append(
         $("<li>")
-          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .addClass("text-lg show-results font-medium text-[#2B2B2B]")
           .text(displayIp)
       );
 
       $("#show-location").append(
         $("<li>")
-          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .addClass("text-lg show-results font-medium text-[#2B2B2B]")
           .text(displayCity + ", " + region + " " + postalCode)
       );
 
       $("#show-timezone").append(
         $("<li>")
-          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .addClass("text-lg show-results font-medium text-[#2B2B2B]")
           .text("UTC " + timezone)
       );
 
       $("#show-isp").append(
         $("<li>")
-          .addClass("text-lg font-medium text-[#2B2B2B]")
+          .addClass("text-lg show-results font-medium text-[#2B2B2B]")
           .text(isp)
       );
 
       // pass values to the map API
-      let map = L.map("map", { center: [newLat, newLong], zoom: 17 });
-      L.marker([newLat, newLong], {icon: myIcon}).addTo(map);
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(map);
+      map.setView([lat, long]);
+
+      // remove previous markers from map
+      let marker = null;
+      if (marker !== null) {
+        map.removeLayer(marker);
+        map.removeLayer(circle);
+      }
+      marker = L.marker([lat, long], { icon: myIcon }).addTo(map);
     });
 
     // clear the input field after search
     $(".user-input").val("");
   });
-
 });
